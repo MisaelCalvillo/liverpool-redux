@@ -13,3 +13,10 @@ export function eliminarTarea(id) {
     id
   }
 }
+
+export function toggleTarea(id) {
+  return {
+    type: types.COMPLETAR_TAREA,
+    id
+  }
+}

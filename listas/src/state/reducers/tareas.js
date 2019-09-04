@@ -6,7 +6,7 @@ function tareas(state = [], action) {
     case types.AGREGAR_TAREA: 
       return state.concat([action.tarea]);
     case types.COMPLETAR_TAREA: 
-      return state;
+        return state.map((tarea) => tarea.id !== action.id ? tarea : { ...tarea, completed: !tarea.completed });
     case types.ELIMINAR_TAREA: 
       return state.filter((tarea) => tarea.id !== action.id);;
     default: 

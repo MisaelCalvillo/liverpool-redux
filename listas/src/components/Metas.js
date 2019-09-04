@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { crearMeta } from './../state/actions/metas';
+import { crearMeta, eliminarMeta, toggleMeta } from './../state/actions/metas';
 
 import Lista from './Lista';
 
@@ -22,6 +22,15 @@ class Metas extends React.Component {
       id: generarId()
     }))
   }
+
+  hacerSwitch = (id) => {
+    this.props.dispatch(toggleMeta(id))
+  }
+
+  eliminar = (id) => {
+    this.props.dispatch(eliminarMeta(id))
+  }
+
   render() {
     console.log('PROPS metas', this.props);
     return (
@@ -36,6 +45,8 @@ class Metas extends React.Component {
         <button onClick={this.creaMeta}>Agregar Meta</button>
         <Lista 
           elementos={this.props.metas}
+          hacerSwitch={this.hacerSwitch}
+          eliminar={this.eliminar}
         />
       </div>
     )

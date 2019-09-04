@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Lista from './Lista';
-import { crearTarea } from './../state/actions/tareas';
+import { crearTarea, eliminarTarea, toggleTarea } from './../state/actions/tareas';
 
 function generarId() {
   return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
@@ -21,6 +21,14 @@ class Tareas extends React.Component  {
     }))
   }
 
+  hacerSwitch = (id) => {
+    this.props.dispatch(toggleTarea(id))
+  }
+
+  eliminar = (id) => {
+    this.props.dispatch(eliminarTarea(id))
+  }
+
   render() {
     return (
       <div>
@@ -32,7 +40,9 @@ class Tareas extends React.Component  {
         />
         <button onClick={this.agregarTarea}>Agregar tarea</button>
         <Lista 
-          elementos={this.props.tareas} 
+          elementos={this.props.tareas}
+          hacerSwitch={this.hacerSwitch}
+          eliminar={this.eliminar} 
         />
       </div>
     );
