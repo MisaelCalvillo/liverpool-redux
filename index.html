@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lista de Todos con Redux</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
+    <script src='https://unpkg.com/react@16.3.0-alpha.1/umd/react.development.js'></script>
+    <script src='https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/babel-standalone@6.15.0/babel.min.js'></script> <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
+    <script src='https://unpkg.com/react@16.3.0-alpha.1/umd/react.development.js'></script>
+    <script src='https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/babel-standalone@6.15.0/babel.min.js'></script>
+  </head>
+  <body>
+    <div>
+      <h1>Metas</h1>
+      <input id='meta-input' type='text' placeholder="Agregar meta" />
+      <button id="metaBtn">Agregar Meta</button>
+      <ul id="metas"></ul>
+    </div>
+    <div>
+      <h1>Tareas</h1>
+      <input id='tarea-input' type='text' placeholder="Agregar tareas" />
+      <button id="tareaBtn">Agregar Tareas</button>
+      <ul id="tareas"></ul>
+    </div>
+    <div id="app"></div>
+    <script type="text/javascript" src="./state/types/tareas.js"></script>
+    <script type="text/javascript" src="./state/types/metas.js"></script>
+    
+    <script type="text/javascript" src="./state/actions/tareas.js"></script>
+    <script type="text/javascript" src="./state/actions/metas.js"></script>
+
+    <script type="text/javascript" src="./state/reducers/tareas.js"></script>
+    <script type="text/javascript" src="./state/reducers/metas.js"></script>
+  
+    <script type="text/javascript">
+    const escuchador = (store) => (next) => (action) => {
+      if (action.type === AGREGAR_TAREA) {
+        alert('Se agregará la tarea' + action.tarea.text);
+      }
+      return next(action);
+    }
+
+    const miTienda = Redux.createStore(Redux.combineReducers({
+      tareas,
+      metas
+    }), Redux.applyMiddleware(escuchador));
+
+      miTienda.subscribe((action) => {
+        console.log('EL ESTADO CAMBIÓ', miTienda.getState(), action);
+      })
+
+      miTienda.subscribe((action) => {
+        console.log('QUE HAY AQUÍ', action);
+      })
+
+      miTienda.subscribe((action) => {
+        console.log('MODIFICA UI', action);
+         const { metas, tareas } = miTienda.getState();
+
+         document.getElementById('metas').innerHTML = '';
+         document.getElementById('tareas').innerHTML= '';
+
+         metas.forEach((meta) => {
+            const node = document.createElement('li');
+            node.style.textDecoration = meta.completed ? 'line-through' : 'none';
+            node.addEventListener('click', () => {
+              miTienda.dispatch(toggleMeta(meta.id));
+            })
+            const text = document.createTextNode(meta.text);
+
+            node.appendChild(text);
+
+            document.getElementById('metas').append(node);
+         })
+
+         tareas.forEach((tarea) => {
+            const node = document.createElement('li');
+            node.addEventListener('click', () => {
+              miTienda.dispatch(eliminarTarea(tarea.id));
+            })
+            const text = document.createTextNode(tarea.text);
+
+            node.appendChild(text);
+
+            document.getElementById('tareas').append(node);
+         })
+      })
+
+      // DOM
+
+      function generarId() {
+        return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
+      }
+
+      function agregarMeta() {
+        const input = document.getElementById('meta-input');
+        const metaTexto = input.value;
+        input.value = '';
+
+        miTienda.dispatch(crearMeta({
+          id: generarId(),
+          completed: false,
+          text: metaTexto
+        }));
+      }
+
+      function agregarTarea() {
+        const input = document.getElementById('tarea-input');
+        const tareaTexto = input.value;
+        input.value = '';
+
+        miTienda.dispatch(crearTarea({
+          id: generarId(),
+          completed: false,
+          text: tareaTexto
+        }));
+      }
+
+      document.getElementById('metaBtn').addEventListener('click', agregarMeta);
+      document.getElementById('tareaBtn').addEventListener('click', agregarTarea);
+    </script>
+
+    <script type="text/babel">
+      function Lista(props) {
+        return (
+          <ul>
+            <li>LISTA</li>
+          </ul>
+        )
+      }
+
+      class Tareas extends React.Component  {
+
+        agregarTarea = (e) => {
+          e.preventDefault();
+          const tareaTexto = this.texto.value;
+          this.texto.value = '';
+
+          this.props.store.dispatch(crearTarea({
+            text: tareaTexto,
+            completed: false,
+            id: generarId()
+          }))
+        }
+
+        render() {
+          return (
+            <div>
+              <h1>Lista de Tareas</h1>
+              <input 
+                type="text"
+                placeholder="Agregar tarea"
+                ref={(input) => this.texto = input }
+              />
+              <button onClick={this.agregarTarea}>Agregar tarea</button>
+              <Lista />
+            </div>
+          );
+        }
+      }
+
+      class Metas extends React.Component {
+        render() {
+          return (
+            <div>
+              METAS
+              <Lista />
+            </div>
+          )
+        }
+      }
+
+      class App extends React.Component {
+        render() {
+          return (
+            <div>
+              <Tareas store={this.props.store} />
+              <Metas />
+            </div>
+          )
+        }
+      }
+
+      ReactDOM.render(<App store={miTienda}/>, document.getElementById('app'))
+    </script>
+  </body>
+</html>
