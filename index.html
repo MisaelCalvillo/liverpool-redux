@@ -122,10 +122,16 @@
     </script>
 
     <script type="text/babel">
-      function Lista(props) {
+      function Lista({ elementos }) {
         return (
           <ul>
-            <li>LISTA</li>
+              {elementos.map(e => (
+                <li key={e.id}>
+                  <span>
+                    {e.text}
+                  </span>
+                </li>
+              ))}
           </ul>
         )
       }
@@ -154,7 +160,9 @@
                 ref={(input) => this.texto = input }
               />
               <button onClick={this.agregarTarea}>Agregar tarea</button>
-              <Lista />
+              <Lista 
+                elementos={this.props.tareas} 
+              />
             </div>
           );
         }
@@ -185,18 +193,29 @@
                 onChange={this.manejaCambioTexto}
               />
               <button onClick={this.creaMeta}>Agregar Meta</button>
-              <Lista />
+              <Lista 
+                elementos={this.props.metas}
+              />
             </div>
           )
         }
       }
 
       class App extends React.Component {
+
+        componentDidMount() {
+          const { store } = this.props;
+
+          store.subscribe(() => { this.forceUpdate() })
+        }
+
         render() {
+          const { store } = this.props;
+          const { tareas, metas } = store.getState();
           return (
             <div>
-              <Tareas store={this.props.store} />
-              <Metas store={this.props.store} />
+              <Tareas tareas={tareas} store={store} />
+              <Metas metas={metas} store={store} />
             </div>
           )
         }
