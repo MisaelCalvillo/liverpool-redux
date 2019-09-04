@@ -118,52 +118,6 @@
     </script>
 
     <script type="text/babel">
-      function Lista({ elementos }) {
-        return (
-          <ul>
-              {elementos.map(e => (
-                <li key={e.id}>
-                  <span>
-                    {e.text}
-                  </span>
-                </li>
-              ))}
-          </ul>
-        )
-      }
-
-      class Tareas extends React.Component  {
-
-        agregarTarea = (e) => {
-          e.preventDefault();
-          const tareaTexto = this.texto.value;
-          this.texto.value = '';
-
-          this.props.store.dispatch(crearTarea({
-            text: tareaTexto,
-            completed: false,
-            id: generarId()
-          }))
-        }
-
-        render() {
-          return (
-            <div>
-              <h1>Lista de Tareas</h1>
-              <input 
-                type="text"
-                placeholder="Agregar tarea"
-                ref={(input) => this.texto = input }
-              />
-              <button onClick={this.agregarTarea}>Agregar tarea</button>
-              <Lista 
-                elementos={this.props.tareas} 
-              />
-            </div>
-          );
-        }
-      }
-
       ReactDOM.render(<App store={miTienda}/>, document.getElementById('app'))
     </script>
   </body>

@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { crearMeta } from './../state/actions/metas';
 
+import Lista from './Lista';
+
 function generarId() {
   return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 }
@@ -32,9 +34,9 @@ class Metas extends React.Component {
           onChange={this.manejaCambioTexto}
         />
         <button onClick={this.creaMeta}>Agregar Meta</button>
-        {/* <Lista 
+        <Lista 
           elementos={this.props.metas}
-        /> */}
+        />
       </div>
     )
   }
