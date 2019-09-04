@@ -1,0 +1,3 @@
+export const AGREGAR_META = 'AGREGAR_META';
+export const COMPLETAR_META = 'COMPLETAR_META';
+export const ELIMINAR_META = 'ELIMINAR_META';

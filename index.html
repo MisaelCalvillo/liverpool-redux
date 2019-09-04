@@ -89,10 +89,6 @@
 
       // DOM
 
-      function generarId() {
-        return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
-      }
-
       function agregarMeta() {
         const input = document.getElementById('meta-input');
         const metaTexto = input.value;
@@ -165,59 +161,6 @@
               />
             </div>
           );
-        }
-      }
-
-      class Metas extends React.Component {
-        state = {
-          texto: ''
-        }
-        manejaCambioTexto = (e) => {
-          this.setState({ texto: e.target.value })
-        }
-        creaMeta = () => {
-          this.props.store.dispatch(crearMeta({
-            text: this.state.texto,
-            completed: false,
-            id: generarId()
-          }))
-        }
-        render() {
-          return (
-            <div>
-              <h1>Lista de Metas</h1>
-              <input 
-                type="text"
-                placeholder="Agregar meta"
-                value={this.state.texto}
-                onChange={this.manejaCambioTexto}
-              />
-              <button onClick={this.creaMeta}>Agregar Meta</button>
-              <Lista 
-                elementos={this.props.metas}
-              />
-            </div>
-          )
-        }
-      }
-
-      class App extends React.Component {
-
-        componentDidMount() {
-          const { store } = this.props;
-
-          store.subscribe(() => { this.forceUpdate() })
-        }
-
-        render() {
-          const { store } = this.props;
-          const { tareas, metas } = store.getState();
-          return (
-            <div>
-              <Tareas tareas={tareas} store={store} />
-              <Metas metas={metas} store={store} />
-            </div>
-          )
         }
       }
 

@@ -1,13 +1,17 @@
+import types from './../types';
+
 function tareas(state = [], action) {
   console.log('REDUCER TAREAS', action);
   switch(action.type) {
-    case AGREGAR_TAREA: 
+    case types.AGREGAR_TAREA: 
       return state.concat([action.tarea]);
-    case COMPLETAR_TAREA: 
+    case types.COMPLETAR_TAREA: 
       return state;
-    case ELIMINAR_TAREA: 
+    case types.ELIMINAR_TAREA: 
       return state.filter((tarea) => tarea.id !== action.id);;
     default: 
       return state;
   }
 }
+
+export default tareas;
