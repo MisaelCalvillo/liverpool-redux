@@ -161,10 +161,30 @@
       }
 
       class Metas extends React.Component {
+        state = {
+          texto: ''
+        }
+        manejaCambioTexto = (e) => {
+          this.setState({ texto: e.target.value })
+        }
+        creaMeta = () => {
+          this.props.store.dispatch(crearMeta({
+            text: this.state.texto,
+            completed: false,
+            id: generarId()
+          }))
+        }
         render() {
           return (
             <div>
-              METAS
+              <h1>Lista de Metas</h1>
+              <input 
+                type="text"
+                placeholder="Agregar meta"
+                value={this.state.texto}
+                onChange={this.manejaCambioTexto}
+              />
+              <button onClick={this.creaMeta}>Agregar Meta</button>
               <Lista />
             </div>
           )
@@ -176,7 +196,7 @@
           return (
             <div>
               <Tareas store={this.props.store} />
-              <Metas />
+              <Metas store={this.props.store} />
             </div>
           )
         }
